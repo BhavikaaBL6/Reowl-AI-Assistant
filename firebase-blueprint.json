@@ -1,0 +1,231 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Store account details and study progress",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "teacher"] },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "studyTime": { "type": "number" },
+            "goalsHit": { "type": "number" },
+            "totalNotes": { "type": "number" },
+            "avgAccuracy": { "type": "number" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "email"]
+    },
+    "Task": {
+      "title": "Study Task",
+      "description": "User scheduled study tasks",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "time": { "type": "string" },
+        "duration": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "subject": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "time", "completed"]
+    },
+    "Resource": {
+      "title": "Academic Resource",
+      "description": "Uploaded or generated study materials",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["PDF", "DOCX", "QUIZ", "FOLDER"] },
+        "subject": { "type": "string" },
+        "size": { "type": "string" },
+        "isBookmarked": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "type"]
+    },
+    "ChatSession": {
+      "title": "AI Chat Session",
+      "description": "Historical interactions with Reo AI",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": { "type": "string", "enum": ["user", "model"] },
+              "text": { "type": "string" }
+            }
+          }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "messages", "updatedAt"]
+    },
+    "Quiz": {
+      "title": "Published Quiz",
+      "description": "Quizzes published by teachers for students",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "subject": { "type": "string" },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "type": { "type": "string" },
+              "question": { "type": "string" },
+              "options": { "type": "array", "items": { "type": "string" } },
+              "correctAnswer": { "type": "string" },
+              "explanation": { "type": "string" }
+            }
+          }
+        },
+        "publishedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "questions", "teacherId"]
+    },
+    "QuizAttempt": {
+      "title": "Student Quiz Attempt",
+      "description": "Record of a student completing a quiz",
+      "type": "object",
+      "properties": {
+        "quizId": { "type": "string" },
+        "quizTitle": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "score": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "percentage": { "type": "number" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["quizId", "studentId", "teacherId", "score"]
+    },
+    "Classroom": {
+      "title": "Classroom",
+      "description": "A group of students managed by a teacher",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "subject": { "type": "string" },
+        "code": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "studentIds": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "code", "teacherId"]
+    },
+    "SharedResource": {
+      "title": "Shared Resource",
+      "description": "A resource or note shared with a classroom",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["NOTE", "FILE", "QUIZ"] },
+        "content": { "type": "object" },
+        "classId": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "sharedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "type", "classId", "teacherId"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Alerts for students or teachers",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string", "enum": ["CLASS_ADDED", "RESOURCE_SHARED", "QUIZ_ASSIGNED"] },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "metadata": { "type": "object" }
+      },
+      "required": ["userId", "title", "message", "type", "read", "createdAt"]
+    },
+    "LessonScript": {
+      "title": "Lesson Script",
+      "description": "AI-generated lesson plans for teachers",
+      "type": "object",
+      "properties": {
+        "topic": { "type": "string" },
+        "content": {
+          "type": "object",
+          "properties": {
+            "engagementHooks": { "type": "array", "items": { "type": "string" } },
+            "neuralCheckpoints": { "type": "array", "items": { "type": "string" } },
+            "analogies": {
+              "type": "object",
+              "properties": {
+                "beginner": { "type": "string" },
+                "intermediate": { "type": "string" },
+                "advanced": { "type": "string" }
+              }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["topic", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile document"
+    },
+    "/users/{userId}/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "User-specific study tasks"
+    },
+    "/users/{userId}/resources/{resourceId}": {
+      "schema": "Resource",
+      "description": "User-specific saved resources"
+    },
+    "/users/{userId}/notifications/{notifId}": {
+      "schema": "Notification",
+      "description": "User specific notifications"
+    },
+    "/users/{userId}/lessonScripts/{scriptId}": {
+      "schema": "LessonScript",
+      "description": "Teacher's generated lesson scripts"
+    },
+    "/users/{userId}/chatHistory/{sessionId}": {
+      "schema": "ChatSession",
+      "description": "AI chat history for the user"
+    },
+    "/quizzes/{quizId}": {
+      "schema": "Quiz",
+      "description": "Global collection of published quizzes"
+    },
+    "/quiz_attempts/{attemptId}": {
+      "schema": "QuizAttempt",
+      "description": "Historical record of all quiz attempts"
+    },
+    "/classrooms/{classId}": {
+      "schema": "Classroom",
+      "description": "Global collection of classrooms"
+    },
+    "/classrooms/{classId}/sharedResources/{resourceId}": {
+      "schema": "SharedResource",
+      "description": "Resources shared within a specific classroom"
+    }
+  }
+}

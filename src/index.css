@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: var(--primary-color);
+  --color-primary-light: var(--primary-light);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+}
+
+:root {
+  --primary-color: #5E5CE6;
+  --primary-light: #EBEDFF;
+  --surface: rgba(255, 255, 255, 0.9);
+  --ink: #1C1C1E;
+  --ink-muted: #636366;
+  --bg-gradient-1: #F0F4FF;
+  --bg-gradient-2: #FAF9FF;
+  --bg-gradient-3: #F5F9FF;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --sky-opacity: 0.15;
+}
+
+.dark {
+  --primary-light: rgba(94, 92, 230, 0.2);
+  --surface: rgba(28, 28, 30, 0.9);
+  --ink: #F2F2F7;
+  --ink-muted: #8E8E93;
+  --bg-gradient-1: #0D0B21;
+  --bg-gradient-2: #151619;
+  --bg-gradient-3: #0A0A0A;
+  --glass-bg: rgba(30, 30, 45, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --sky-opacity: 0.05;
+}
+
+@layer base {
+  body {
+    @apply text-ink antialiased font-sans min-h-screen transition-colors duration-300;
+    background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 50%, var(--bg-gradient-3) 100%);
+    background-attachment: fixed;
+  }
+
+  /* Sky background effect */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://picsum.photos/seed/sky/1920/1080?blur=10');
+    background-size: cover;
+    opacity: var(--sky-opacity);
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    @apply shadow-[0_8px_32px_0_rgba(0,0,0,0.05)];
+  }
+  
+  .glass-dark {
+    @apply bg-neutral-900/10 backdrop-blur-md border border-white/10;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.2);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.4);
+  }
+
+  /* Specific styling for scrollbars on dark backgrounds like the side panel */
+  .dark-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .dark-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Basic Markdown Styling */
+  .prose {
+    @apply text-inherit;
+  }
+  .prose h1, .prose h2, .prose h3 {
+    @apply font-black tracking-tight mt-4 mb-2 first:mt-0;
+  }
+  .prose h1 { @apply text-lg; }
+  .prose h2 { @apply text-base; }
+  .prose h3 { @apply text-sm; }
+  .prose p {
+    @apply mb-3 last:mb-0;
+  }
+  .prose ul, .prose ol {
+    @apply ml-4 mb-3;
+  }
+  .prose ul {
+    @apply list-disc;
+  }
+  .prose ol {
+    @apply list-decimal;
+  }
+  .prose li {
+    @apply mb-1;
+  }
+  .prose strong {
+    @apply font-black text-primary;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-primary/20 pl-4 py-1 italic bg-primary/5 rounded-r-lg mb-3;
+  }
+}
+
+/* Global Scrollbar Overrides for a clean look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}

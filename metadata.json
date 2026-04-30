@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Reowl • AI Academic Hub",
+  "description": "A high-end, AI-powered academic command center with integrated study tools, focus rooms, and smart notes.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}
