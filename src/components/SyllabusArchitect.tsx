@@ -6,7 +6,6 @@ import { db, isDemoMode, handleFirestoreError } from "../lib/firebase";
 import { useFirebase } from "../contexts/FirebaseContext";
 import { getGeminiModel } from "../lib/gemini";
 import { formatISTShortDate } from "../lib/utils";
-import { Type } from "@google/genai";
 
 interface RoadmapItem {
   week: string;
@@ -102,28 +101,28 @@ export const SyllabusArchitect = ({ onNavigate }: { onNavigate: (tab: string) =>
         config: {
           responseMimeType: "application/json",
           responseSchema: {
-            type: Type.OBJECT,
+            type: "OBJECT",
             properties: {
               roadmap: {
-                type: Type.ARRAY,
+                type: "ARRAY",
                 items: {
-                  type: Type.OBJECT,
+                  type: "OBJECT",
                   properties: {
-                    week: { type: Type.STRING },
-                    topic: { type: Type.STRING },
-                    deadline: { type: Type.STRING },
-                    priority: { type: Type.STRING, enum: ["High", "Medium", "Low"] }
+                    week: { type: "STRING" },
+                    topic: { type: "STRING" },
+                    deadline: { type: "STRING" },
+                    priority: { type: "STRING", enum: ["High", "Medium", "Low"] }
                   },
                   required: ["week", "topic", "priority"]
                 }
               },
               summary: {
-                type: Type.OBJECT,
+                type: "OBJECT",
                 properties: {
-                  primaryFocus: { type: Type.STRING },
-                  totalTopics: { type: Type.NUMBER },
-                  criticalMilestones: { type: Type.NUMBER },
-                  estimatedWorkload: { type: Type.STRING }
+                  primaryFocus: { type: "STRING" },
+                  totalTopics: { type: "NUMBER" },
+                  criticalMilestones: { type: "NUMBER" },
+                  estimatedWorkload: { type: "STRING" }
                 },
                 required: ["primaryFocus", "totalTopics", "criticalMilestones", "estimatedWorkload"]
               }

@@ -16,8 +16,7 @@ import {
   Trash2,
   BookOpen
 } from "lucide-react";
-import { GoogleGenAI, Type } from "@google/genai";
-import { neuralKeyManager } from "../lib/keyRotation";
+import { getGeminiModel } from "../lib/gemini";
 import { useFirebase } from "../contexts/FirebaseContext";
 import { collection, addDoc, serverTimestamp, query, where, orderBy, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { db, handleFirestoreError, isDemoMode } from "../lib/firebase";
@@ -72,29 +71,28 @@ export const LessonScriptGenerator = () => {
     setGeneratedScript(null);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: neuralKeyManager.getNextKey() });
+      const model = getGeminiModel({ model: "gemini-3-flash-preview" });
       const prompt = `Generate a neuro-scientifically grounded lesson script for the topic: "${topic}".
       Include:
       1. 3 Engagement Hooks: Mind-blowing facts or questions to grab attention.
       2. 3 Neural Checkpoints: Specific moments to stop and ask a "Reo-Quiz" question (active recall checkpoint).
       3. 3 Analogies: 3 different simplified analogies for different learning levels (Beginner, Intermediate, Advanced).`;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
+      const response = await model.generateContent({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
         config: {
           responseMimeType: "application/json",
           responseSchema: {
-            type: Type.OBJECT,
+            type: "OBJECT",
             properties: {
-              engagementHooks: { type: Type.ARRAY, items: { type: Type.STRING } },
-              neuralCheckpoints: { type: Type.ARRAY, items: { type: Type.STRING } },
+              engagementHooks: { type: "ARRAY", items: { type: "STRING" } },
+              neuralCheckpoints: { type: "ARRAY", items: { type: "STRING" } },
               analogies: {
-                type: Type.OBJECT,
+                type: "OBJECT",
                 properties: {
-                  beginner: { type: Type.STRING },
-                  intermediate: { type: Type.STRING },
-                  advanced: { type: Type.STRING }
+                  beginner: { type: "STRING" },
+                  intermediate: { type: "STRING" },
+                  advanced: { type: "STRING" }
                 },
                 required: ["beginner", "intermediate", "advanced"]
               }

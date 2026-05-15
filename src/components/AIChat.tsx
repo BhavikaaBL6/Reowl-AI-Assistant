@@ -8,7 +8,6 @@ import { getGeminiModel } from "../lib/gemini";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Send, Bot, User, X, MessageSquare, Loader2, Mic, CircleStop, Volume2, RotateCcw, Paperclip, Trash2 } from "lucide-react";
-import { Modality } from "@google/genai";
 
 import ReactMarkdown from "react-markdown";
 

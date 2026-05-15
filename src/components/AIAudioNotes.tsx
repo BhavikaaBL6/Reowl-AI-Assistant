@@ -21,8 +21,7 @@ import {
   ChevronRight,
   Ear
 } from "lucide-react";
-import { GoogleGenAI, Modality } from "@google/genai";
-import { neuralKeyManager } from "../lib/keyRotation";
+import { getGeminiModel } from "../lib/gemini";
 import { Badge } from "./ui/Badge";
 import { Card } from "./ui/Card";
 
@@ -83,24 +82,23 @@ export const AIAudioNotes = () => {
     setAudioUrl(null);
     setTranscript("");
 
-    const ai = new GoogleGenAI({ apiKey: neuralKeyManager.getNextKey() });
+    const model = getGeminiModel({ model: "gemini-3-flash-preview" });
 
     try {
       // Step 1: Generate Transcript
-      const textResponse = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: `Generate a clear, educational explanation (about 100-150 words) for the topic: "${topic}". Make it engaging and easy to understand for a student.`
+      const textResponse = await model.generateContent({
+        contents: [{ role: "user", parts: [{ text: `Generate a clear, educational explanation (about 100-150 words) for the topic: "${topic}". Make it engaging and easy to understand for a student.` }] }]
       });
 
       const text = textResponse.text || "No explanation generated.";
       setTranscript(text);
 
       // Step 2: Generate Audio (TTS)
-      const ttsResponse = await ai.models.generateContent({
-        model: "gemini-3.1-flash-tts-preview",
+      const ttsModel = getGeminiModel({ model: "gemini-3.1-flash-tts-preview" });
+      const ttsResponse = await ttsModel.generateContent({
         contents: [{ parts: [{ text: `Read this educational note clearly and warmly: ${text}` }] }],
         config: {
-          responseModalities: [Modality.AUDIO],
+          responseModalities: ["audio"],
           speechConfig: {
             voiceConfig: {
               prebuiltVoiceConfig: { voiceName: 'Kore' },

@@ -21,8 +21,7 @@ import {
   RefreshCw,
   Search
 } from "lucide-react";
-import { GoogleGenAI } from "@google/genai";
-import { neuralKeyManager } from "../lib/keyRotation";
+import { getGeminiModel } from "../lib/gemini";
 import { Badge } from "./ui/Badge";
 import { Card } from "./ui/Card";
 
@@ -39,7 +38,7 @@ export const KnowledgeValidator = () => {
     setIsAnalyzing(true);
     setAnalysis(null);
 
-    const ai = new GoogleGenAI({ apiKey: neuralKeyManager.getNextKey() });
+    const model = getGeminiModel({ model: "gemini-3-flash-preview" });
 
     const prompt = `
       You are 'Neural Buddy', a cognitive diagnostic AI. A student is trying to explain the topic: '${topic}'.
@@ -63,9 +62,8 @@ export const KnowledgeValidator = () => {
     `;
 
     try {
-      const result = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt
+      const result = await model.generateContent({
+        contents: [{ role: "user", parts: [{ text: prompt }] }]
       });
       const output = result.text || "{}";
       const cleanedJson = output.replace(/```json/g, "").replace(/```/g, "").trim();

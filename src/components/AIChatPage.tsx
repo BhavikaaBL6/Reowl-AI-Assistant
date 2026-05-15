@@ -26,7 +26,6 @@ import {
   Volume2,
   RotateCcw
 } from "lucide-react";
-import { Modality } from "@google/genai";
 import { useFirebase } from "../contexts/FirebaseContext";
 import { db, handleFirestoreError, isDemoMode } from "../lib/firebase";
 import { 
