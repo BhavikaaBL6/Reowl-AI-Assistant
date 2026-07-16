@@ -3,6 +3,8 @@
 
 **🚀 Live Demo:** [https://reowl.onrender.com](https://reowl.onrender.com)
 
+*Connect with me on [LinkedIn](www.linkedin.com/in/bhavika-ajwani-a01603398)!*
+
 ---
 
 ## 🌟 Key Features
